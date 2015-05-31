@@ -22,4 +22,8 @@ public class Player {
 		y += speed;
 	}
 
+    public boolean isColliding(float minX, float maxX, float minY, float maxY) {
+        return !((x>maxX || x+width<minX)||(y>maxY || y+height<minY));
+    }
+
 }

@@ -84,9 +84,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        System.out.println(player.flying);
         player.flying = true;
-        System.out.println(player.flying);
         return false;
     }
 

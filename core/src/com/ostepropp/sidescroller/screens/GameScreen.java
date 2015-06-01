@@ -31,7 +31,7 @@ public class GameScreen implements Screen, InputProcessor {
         hindrances.add(new Hindrance(1040,-360));
         hindrances.add(new Hindrance(1040,440));
         hindrances.add(new Hindrance(1440,300));
-        hindrances.add(new Hindrance(1440,-600));
+        hindrances.add(new Hindrance(1440,-600)); // TODO: Random funksjon for hindrance
         gameOver = false;
     }
 
@@ -44,7 +44,7 @@ public class GameScreen implements Screen, InputProcessor {
             for (Hindrance hindrance : hindrances) {
                 hindrance.update(delta, speed);
                 if (player.isColliding(hindrance.x, hindrance.x + hindrance.width, hindrance.y, hindrance.y + hindrance.height)) {
-                    System.out.println("au");
+                    System.out.println("au"); // TODO: Få gameover tekst på gamescreen
                     gameOver = true;
                 }
             }

@@ -3,9 +3,9 @@ package com.ostepropp.sidescroller;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Player {
-	public float width = 100, height = 100, x, y, horSpeed, vertSpeed;
-	public boolean flying, boosting;
-	public int top = 620, bot = 0;
+	public float width = 100, height = 100, x = 300, y = 310, horSpeed, vertSpeed;
+	public boolean flying, boosting, back;
+	public int top = 1000, bot = 0;
 
 	public void debugRender(ShapeRenderer renderer) {
 		renderer.rect(x, y, width, height);
@@ -18,10 +18,10 @@ public class Player {
 				horSpeed += delta*10 + .1;
 				vertSpeed = 0;
 			} else if (horSpeed > 0 && x > 0) {
-				if (x > 620) {
-					horSpeed -= delta*620/10;
+				if (x > top) {
+					horSpeed -= delta*top/10;
 				} else {
-					horSpeed -= delta*(620-y)/10;
+					horSpeed -= delta*(top-y)/10;
 				}
 
 			} else if (horSpeed <= 0 && x > 0) {
@@ -32,7 +32,12 @@ public class Player {
 			x += horSpeed;
 		} else  {
 			horSpeed = 0;
-			x = 0;
+
+		}
+
+		if(back){
+			horSpeed -= delta*10;
+			x += horSpeed;
 		}
 
 		if (y >= 0) {

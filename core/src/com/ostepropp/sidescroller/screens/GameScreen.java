@@ -1,6 +1,7 @@
 package com.ostepropp.sidescroller.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -16,7 +17,7 @@ import java.util.List;
 public class GameScreen implements Screen, InputProcessor {
 
 	ShapeRenderer debugRenderer;
-	float speed = 120;
+	float speed = 250;
 	Player player;
 	List<Hindrance> hindrances;
 	boolean gameOver;
@@ -57,6 +58,9 @@ public class GameScreen implements Screen, InputProcessor {
 					gameOver = true;
 				}
 			}
+			if(player.isColliding(0,0,0,720)) {
+				gameOver = true;
+			}
 		}
 
 		debugRenderer.begin(ShapeType.Filled);
@@ -94,20 +98,24 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode > 50) {
+		if (keycode == Input.Keys.D) {
 			player.boosting = true;
-		} else {
+		} else if(keycode == Input.Keys.W) {
 			player.flying = true;
+		} else if(keycode == Input.Keys.A){
+			player.back = true;
 		}
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if (keycode > 50) {
+		if (keycode == Input.Keys.D) {
 			player.boosting = false;
-		} else {
+		} else if(keycode == Input.Keys.W) {
 			player.flying = false;
+		} else if(keycode == Input.Keys.A){
+			player.back = false;
 		}
 		return false;
 	}

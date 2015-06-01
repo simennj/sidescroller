@@ -7,6 +7,7 @@ import com.ostepropp.sidescroller.screens.GameScreen;
 public class GameClass extends Game {
 	
 	Screen gameScreen;
+	Screen menuScreen;
 	
 	@Override
 	public void create () {

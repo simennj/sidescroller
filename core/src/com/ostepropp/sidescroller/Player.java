@@ -13,54 +13,43 @@ public class Player {
 
 	public void update(float delta, float speed) {
 
-		if (x >= 0) {
-			if (boosting && x < top) {
+
+		if(boosting) { //Bevegelse i x
+			if(x < top) {
 				horSpeed += delta*10 + .1;
+			}
+			else {
+				horSpeed -= delta*top/10;
+			}
+		 }else if(horSpeed > 0) {
+			horSpeed -= delta*top/10;
+		} else if(back) {
+			horSpeed -= delta*30 + .1;
+		} else {
+			horSpeed = -delta*speed;
+		}
+
+		horSpeed = horSpeed*0.95f;
+		x += horSpeed;
+
+		if(y >= 0) { //Bevegelse i y
+			if(y <= 620) {
+				if(flying) {
+					vertSpeed += delta*20;
+				} else {
+					vertSpeed -= delta*20;
+				}
+			} else {
 				vertSpeed = 0;
-			} else if (horSpeed > 0 && x > 0) {
-				if (x > top) {
-					horSpeed -= delta*top/10;
-				} else {
-					horSpeed -= delta*(top-y)/10;
-				}
-
-			} else if (horSpeed <= 0 && x > 0) {
-				horSpeed = -delta*speed;
-
+				y = 620;
 			}
-			horSpeed = horSpeed * 0.95f;
-			x += horSpeed;
-		} else  {
-			horSpeed = 0;
-
-		}
-
-		if(back){
-			horSpeed -= delta*10;
-			x += horSpeed;
-		}
-
-		if (y >= 0) {
-			if (!boosting) {
-				if (y <= 620) {
-					if (flying) {
-						vertSpeed += delta*20 ;
-
-					} else {
-						vertSpeed -= delta*20;
-					}
-				} else {
-					vertSpeed = 0;
-					y = 620;
-				}
-				vertSpeed = vertSpeed*0.95f;
-				y += vertSpeed;
-
-			}
+			vertSpeed = vertSpeed * 0.95f;
+			y += vertSpeed;
 		} else {
 			vertSpeed = 0;
 			y = 0;
 		}
+		
 	}
 	public boolean isColliding(float minX, float maxX, float minY, float maxY) {
 		return !((x > maxX || x + width < minX) || (y > maxY || y + height < minY));

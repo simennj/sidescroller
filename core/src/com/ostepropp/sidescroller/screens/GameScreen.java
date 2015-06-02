@@ -98,12 +98,15 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode == Input.Keys.D) {
+		if(!gameOver) {
+		if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
 			player.boosting = true;
-		} else if(keycode == Input.Keys.W) {
+		} else if(keycode == Input.Keys.W || keycode == Input.Keys.UP || keycode == Input.Keys.SPACE) {
 			player.flying = true;
-		} else if(keycode == Input.Keys.A){
+		} else if(keycode == Input.Keys.A || keycode == Input.Keys.LEFT){
 			player.back = true;
+		} } else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
+			start();
 		}
 		return false;
 	}

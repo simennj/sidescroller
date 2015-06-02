@@ -52,6 +52,7 @@ public class GameScreen implements Screen, InputProcessor {
 						+ hindrance.height)) {
 					System.out.println("au"); // TODO: Få gameover tekst på
 												// gamescreen
+					System.out.println(player.getScore(delta, speed));
 					gameOver = true;
 				}
 			}
@@ -98,11 +99,11 @@ public class GameScreen implements Screen, InputProcessor {
 		if(!gameOver) {
 		if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
 			player.boosting = true;
-		} else if(keycode == Input.Keys.W || keycode == Input.Keys.UP || keycode == Input.Keys.SPACE) {
+		} else if(keycode == Input.Keys.W || keycode == Input.Keys.UP) {
 			player.flying = true;
 		} else if(keycode == Input.Keys.A || keycode == Input.Keys.LEFT){
 			player.back = true;
-		} } else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
+		}} else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
 			start();
 		}
 		return false;
@@ -110,11 +111,11 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if (keycode == Input.Keys.D) {
+		if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
 			player.boosting = false;
-		} else if(keycode == Input.Keys.W) {
+		} else if(keycode == Input.Keys.W || keycode == Input.Keys.UP) {
 			player.flying = false;
-		} else if(keycode == Input.Keys.A){
+		} else if(keycode == Input.Keys.A || keycode == Input.Keys.LEFT){
 			player.back = false;
 		}
 		return false;

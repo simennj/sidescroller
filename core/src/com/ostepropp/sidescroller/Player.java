@@ -4,16 +4,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Player {
 	public float width = 100, height = 100, x = 300, y = 310, horSpeed, vertSpeed;
-	public boolean flying, boosting, back;
-	public int top = 1000, bot = 0;
-
+	public boolean flying, boosting, back, hold;
+	public int top = 1000, bot = 0, score;
 	public void debugRender(ShapeRenderer renderer) {
 		renderer.rect(x, y, width, height);
 	}
 
 	public void update(float delta, float speed) {
-
-
+		score++;
 		if(boosting) { //Bevegelse i x
 			if(x < top) {
 				horSpeed += delta*10 + .1;
@@ -49,7 +47,11 @@ public class Player {
 			vertSpeed = 0;
 			y = 0;
 		}
-		
+	}
+
+
+	public int getScore(float delta, float speed) {
+		return score;
 	}
 	public boolean isColliding(float minX, float maxX, float minY, float maxY) {
 		return !((x > maxX || x + width < minX) || (y > maxY || y + height < minY));

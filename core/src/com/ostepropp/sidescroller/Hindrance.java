@@ -16,7 +16,7 @@ public class Hindrance {
     }
 
     public void update(float delta, float speed) {
-        x-=speed*delta;
+        x -=speed*delta;
         if (x < -100) {
             x = 1200;
         }

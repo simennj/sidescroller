@@ -34,7 +34,7 @@ public class MenuScreen implements Screen {
 	@Override
 	public void show() {
 		stage = new Stage(new ScreenViewport());
-		Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(stage);
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		table = new Table(skin);
 		table.setFillParent(true);
@@ -47,7 +47,7 @@ public class MenuScreen implements Screen {
 				System.out.println("asdf");
 			}
 		});
-		table.add(new Label("ShapeRenderer er BEST", skin));
+		table.add(new Label("ShapeRenderer er ok", skin));
 		table.row();
 		table.add(start);
 		table.setDebug(true);

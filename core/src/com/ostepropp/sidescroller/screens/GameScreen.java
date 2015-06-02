@@ -5,14 +5,25 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ostepropp.sidescroller.Hindrance;
 import com.ostepropp.sidescroller.LevelLoader;
 import com.ostepropp.sidescroller.Player;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +36,22 @@ public class GameScreen implements Screen, InputProcessor {
 	List<Hindrance> hindrances;
 	boolean gameOver;
 
+    Stage stage;
+    Label label;
+    Skin skin;
+    Table table;
+    Label.LabelStyle style;
+
+    FreeTypeFontGenerator font;
+    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+
+
 	@Override
 	public void show() {
 		debugRenderer = new ShapeRenderer();
 		Gdx.input.setInputProcessor(this);
 		start();
+
 		
 	}
 	
@@ -52,6 +74,7 @@ public class GameScreen implements Screen, InputProcessor {
 						+ hindrance.height)) {
 					System.out.println("au"); // TODO: Få gameover tekst på
 												// gamescreen
+
 					gameOver = true;
 				}
 			}
@@ -59,6 +82,9 @@ public class GameScreen implements Screen, InputProcessor {
 				gameOver = true;
 			}
 		}
+        if(gameOver){
+            gameover();
+        }
 
 		debugRenderer.begin(ShapeType.Filled);
 		player.debugRender(debugRenderer);
@@ -67,6 +93,29 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 		debugRenderer.end();
 	}
+
+    public void gameover(){
+        //Egen font
+        font = new FreeTypeFontGenerator(Gdx.files.internal("fonts/visitor1.ttf"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 50;
+        BitmapFont visitor5 = font.generateFont(parameter);
+
+        stage = new Stage(new ScreenViewport());
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        table = new Table(skin);
+        table.setFillParent(true);
+
+        //Label
+        style = new Label.LabelStyle(visitor5, Color.RED);
+        label = new Label("Game Over, taper", style);
+        table.add(label);
+        table.setDebug(true);
+        stage.addActor(table);
+
+        stage.draw();
+        font.dispose();
+    }
 
 	@Override
 	public void resize(int width, int height) {

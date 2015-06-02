@@ -6,9 +6,11 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.ostepropp.sidescroller.Hindrance;
+import com.ostepropp.sidescroller.LevelLoader;
 import com.ostepropp.sidescroller.Player;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class GameScreen implements Screen, InputProcessor {
 	ShapeRenderer debugRenderer;
 	float speed = 250;
 	Player player;
+	LevelLoader loader = new LevelLoader();
 	List<Hindrance> hindrances;
 	boolean gameOver;
 
@@ -27,18 +30,12 @@ public class GameScreen implements Screen, InputProcessor {
 		debugRenderer = new ShapeRenderer();
 		Gdx.input.setInputProcessor(this);
 		start();
+		
 	}
 	
 	public void start() {
 		player = new Player();
-		hindrances = new ArrayList<>();
-		hindrances.add(new Hindrance(640, -400));
-		hindrances.add(new Hindrance(640, 400));
-		hindrances.add(new Hindrance(1040, -360));
-		hindrances.add(new Hindrance(1040, 440));
-		hindrances.add(new Hindrance(1440, 300));
-		hindrances.add(new Hindrance(1440, -600)); // TODO: Random funksjon for
-													// hindrance
+		hindrances = loader.loadLevel("levels/test");
 		gameOver = false;
 	}
 

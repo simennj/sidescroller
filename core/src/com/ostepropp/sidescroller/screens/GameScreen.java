@@ -1,6 +1,8 @@
 package com.ostepropp.sidescroller.screens;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -9,25 +11,19 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ostepropp.sidescroller.Hindrance;
 import com.ostepropp.sidescroller.LevelLoader;
 import com.ostepropp.sidescroller.Player;
-
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
-
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameScreen implements Screen, InputProcessor {
 
@@ -35,32 +31,39 @@ public class GameScreen implements Screen, InputProcessor {
 	float speed = 250;
 	Player player;
 	LevelLoader loader = new LevelLoader("levels/test");
-	List<Hindrance> hindrances;
+	List<Hindrance> hindrances = new ArrayList<Hindrance>();
+	float lengthToNextSegment;
+	int currentSegment, totalSegments = loader.totalSegments();
 	boolean gameOver;
 
-    Stage stage;
-    Label label;
-    Skin skin;
-    Table table;
-    Label.LabelStyle style;
+	Stage stage;
+	Label label;
+	Skin skin;
+	Table table;
+	Label.LabelStyle style;
 
-    FreeTypeFontGenerator font;
-    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
-
+	FreeTypeFontGenerator font;
+	FreeTypeFontGenerator.FreeTypeFontParameter parameter;
 
 	@Override
 	public void show() {
 		debugRenderer = new ShapeRenderer();
 		Gdx.input.setInputProcessor(this);
 		start();
-
-		
 	}
-	
+
 	public void start() {
 		player = new Player();
-		hindrances = loader.getSegment(0);
+		currentSegment = 0;
+		hindrances = new ArrayList<Hindrance>();
+		loadSegment(MathUtils.clamp(++currentSegment, 0, totalSegments - 1));
 		gameOver = false;
+	}
+
+	public void loadSegment(int i) {
+		hindrances.addAll(loader.getSegment(i));
+		lengthToNextSegment = loader.getSegmentLength(i);
+		System.out.println(hindrances);
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if (!gameOver) {
-			player.update(delta,speed);
+			player.update(delta, speed);
 			for (Hindrance hindrance : hindrances) {
 				hindrance.update(delta, speed);
 				if (player.isColliding(hindrance.x, hindrance.x
@@ -78,13 +81,21 @@ public class GameScreen implements Screen, InputProcessor {
 					gameOver = true;
 				}
 			}
-			if(player.isColliding(0,0,0,720)) {
+			if (player.isColliding(0, 0, 0, 720)) {
 				gameOver = true;
 			}
+			lengthToNextSegment -= speed * delta;
+			if (lengthToNextSegment < 0) {
+				loadSegment(MathUtils.clamp(++currentSegment, 0,
+						totalSegments - 1));
+			}
 		}
-        if(gameOver){
-            gameover();
-        }
+		if (gameOver) {
+			gameover();
+		}
+
+		hindrances = hindrances.stream().filter(h -> h.x > -h.width)
+				.collect(Collectors.toList());
 
 		debugRenderer.begin(ShapeType.Filled);
 		player.debugRender(debugRenderer);
@@ -94,28 +105,29 @@ public class GameScreen implements Screen, InputProcessor {
 		debugRenderer.end();
 	}
 
-    public void gameover(){
-        //Egen font
-        font = new FreeTypeFontGenerator(Gdx.files.internal("fonts/visitor1.ttf"));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 50;
-        BitmapFont visitor5 = font.generateFont(parameter);
+	public void gameover() {
+		// Egen font
+		font = new FreeTypeFontGenerator(
+				Gdx.files.internal("fonts/visitor1.ttf"));
+		parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 50;
+		BitmapFont visitor5 = font.generateFont(parameter);
 
-        stage = new Stage(new ScreenViewport());
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-        table = new Table(skin);
-        table.setFillParent(true);
+		stage = new Stage(new ScreenViewport());
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		table = new Table(skin);
+		table.setFillParent(true);
 
-        //Label
-        style = new Label.LabelStyle(visitor5, Color.RED);
-        label = new Label("Game Over, taper", style);
-        table.add(label);
-        table.setDebug(true);
-        stage.addActor(table);
+		// Label
+		style = new Label.LabelStyle(visitor5, Color.RED);
+		label = new Label("Game Over, taper", style);
+		table.add(label);
+		table.setDebug(true);
+		stage.addActor(table);
 
-        stage.draw();
-        font.dispose();
-    }
+		stage.draw();
+		font.dispose();
+	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -144,14 +156,15 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if(!gameOver) {
-		if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
-			player.boosting = true;
-		} else if(keycode == Input.Keys.W || keycode == Input.Keys.UP) {
-			player.flying = true;
-		} else if(keycode == Input.Keys.A || keycode == Input.Keys.LEFT){
-			player.back = true;
-		}} else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
+		if (!gameOver) {
+			if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
+				player.boosting = true;
+			} else if (keycode == Input.Keys.W || keycode == Input.Keys.UP) {
+				player.flying = true;
+			} else if (keycode == Input.Keys.A || keycode == Input.Keys.LEFT) {
+				player.back = true;
+			}
+		} else if (keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
 			start();
 		}
 		return false;
@@ -161,9 +174,9 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean keyUp(int keycode) {
 		if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
 			player.boosting = false;
-		} else if(keycode == Input.Keys.W || keycode == Input.Keys.UP) {
+		} else if (keycode == Input.Keys.W || keycode == Input.Keys.UP) {
 			player.flying = false;
-		} else if(keycode == Input.Keys.A || keycode == Input.Keys.LEFT){
+		} else if (keycode == Input.Keys.A || keycode == Input.Keys.LEFT) {
 			player.back = false;
 		}
 		return false;
@@ -176,7 +189,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(gameOver){
+		if (gameOver) {
 			start();
 		}
 		if (button == Buttons.RIGHT) {

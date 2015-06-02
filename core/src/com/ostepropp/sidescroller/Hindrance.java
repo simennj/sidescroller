@@ -4,26 +4,31 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Hindrance {
 
-    public float width = 100, height = 600, x, y;
+	public float width, height, x, y;
 
-    public Hindrance(float x,float y) {
-        this.x = x;
-        this.y = y;
-    }
+	public Hindrance(float width, float height, float x, float y) {
+		super();
+		this.width = width;
+		this.height = height;
+		this.x = x;
+		this.y = y;
+	}
 
-    public void debugRender(ShapeRenderer renderer) {
-        renderer.rect(x, y, width, height);
-    }
+	public void debugRender(ShapeRenderer renderer) {
+		renderer.rect(x, y, width, height);
+	}
 
-    public void update(float delta, float speed) {
-        x -=speed*delta;
-        if (x < -100) {
-            x = 1200;
-        }
-    }
-    
-    @Override
-    public Object clone() {
-    	return new Hindrance(this.x, this.y);
-    }
+	public void update(float delta, float speed) {
+		x -= speed * delta;
+	}
+	
+	@Override
+	public String toString(){
+		return "hindrance "+width+" "+height+" "+x+" "+y;
+	}
+
+	@Override
+	public Object clone() {
+		return new Hindrance(this.width, this.height, this.x, this.y);
+	}
 }

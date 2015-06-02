@@ -1,27 +1,25 @@
 package com.ostepropp.sidescroller.screens;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.ostepropp.sidescroller.Hindrance;
 import com.ostepropp.sidescroller.LevelLoader;
 import com.ostepropp.sidescroller.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameScreen implements Screen, InputProcessor {
 
 	ShapeRenderer debugRenderer;
 	float speed = 250;
 	Player player;
-	LevelLoader loader = new LevelLoader();
+	LevelLoader loader = new LevelLoader("levels/test");
 	List<Hindrance> hindrances;
 	boolean gameOver;
 
@@ -35,7 +33,7 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	public void start() {
 		player = new Player();
-		hindrances = loader.loadLevel("levels/test");
+		hindrances = loader.getSegment(0);
 		gameOver = false;
 	}
 

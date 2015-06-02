@@ -21,4 +21,9 @@ public class Hindrance {
             x = 1200;
         }
     }
+    
+    @Override
+    public Object clone() {
+    	return new Hindrance(this.x, this.y);
+    }
 }

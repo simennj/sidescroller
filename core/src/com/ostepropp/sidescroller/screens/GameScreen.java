@@ -11,7 +11,9 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -28,6 +30,9 @@ import com.ostepropp.sidescroller.Player;
 public class GameScreen implements Screen, InputProcessor {
 
 	ShapeRenderer debugRenderer;
+	
+	SpriteBatch batch;
+	
 	float speed = 250;
 	Player player;
 	LevelLoader loader = new LevelLoader("levels/test");
@@ -48,6 +53,7 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		debugRenderer = new ShapeRenderer();
+		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
 		start();
 	}
@@ -56,7 +62,7 @@ public class GameScreen implements Screen, InputProcessor {
 		player = new Player();
 		currentSegment = 0;
 		hindrances = new ArrayList<Hindrance>();
-		loadSegment(MathUtils.clamp(++currentSegment, 0, totalSegments - 1));
+		loadSegment(0);
 		gameOver = false;
 	}
 
@@ -68,6 +74,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(1, 1, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if (!gameOver) {
@@ -98,11 +105,17 @@ public class GameScreen implements Screen, InputProcessor {
 				.collect(Collectors.toList());
 
 		debugRenderer.begin(ShapeType.Filled);
+		debugRenderer.setColor(Color.GREEN);
 		player.debugRender(debugRenderer);
+		debugRenderer.setColor(Color.GRAY);
 		for (Hindrance hindrance : hindrances) {
 			hindrance.debugRender(debugRenderer);
 		}
 		debugRenderer.end();
+		
+		batch.begin();
+		player.render(batch);
+		batch.end();
 	}
 
 	public void gameover() {

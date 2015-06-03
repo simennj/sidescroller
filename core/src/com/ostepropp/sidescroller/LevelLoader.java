@@ -25,7 +25,7 @@ public class LevelLoader {
 				String[] line = scanner.nextLine().split(" ");
 				if (line.length > 1)
 					hindrances.add(new Hindrance(Float.parseFloat(line[1]),
-							Float.parseFloat(line[2]),Float.parseFloat(line[3])+720,Float.parseFloat(line[4])));
+							Float.parseFloat(line[2]),Float.parseFloat(line[3]),Float.parseFloat(line[4])));
 				else {
 					segments.add(hindrances);
 					segmentLength.add(Float.parseFloat(line[0]));

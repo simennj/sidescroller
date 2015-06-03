@@ -44,12 +44,19 @@ public class MenuScreen implements Screen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				game.startGame();
-				System.out.println("asdf");
 			}
 		});
-		table.add(new Label("ShapeRenderer er ok", skin));
+		TextButton editor = new TextButton("editor", skin);
+		editor.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.startEditor();
+			}
+		});
+		table.add(new Label("ShapeRenderer er BEST", skin)).colspan(2);
 		table.row();
 		table.add(start);
+		table.add(editor);
 		table.setDebug(true);
 		stage.addActor(table);
 	}

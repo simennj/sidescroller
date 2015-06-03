@@ -90,9 +90,6 @@ public class GameScreen implements Screen, InputProcessor {
 						totalSegments - 1));
 			}
 		}
-		if (gameOver) {
-			gameover();
-		}
 
 		hindrances = hindrances.stream().filter(h -> h.x > -h.width)
 				.collect(Collectors.toList());
@@ -103,6 +100,9 @@ public class GameScreen implements Screen, InputProcessor {
 			hindrance.debugRender(debugRenderer);
 		}
 		debugRenderer.end();
+		if (gameOver) {
+			gameover();
+		}
 	}
 
 	public void gameover() {

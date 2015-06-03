@@ -1,41 +1,51 @@
 package com.ostepropp.sidescroller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Player {
-	public float width = 100, height = 100, x = 300, y = 310, horSpeed, vertSpeed;
+	public float width = 120, height = 60, x = 300, y = 310, horSpeed,
+			vertSpeed;
 	public boolean flying, boosting, back, hold;
 	public int top = 1000, bot = 0, score;
+	public Texture texture = new Texture(Gdx.files.internal("heli3.png"));
+	
+	
 	public void debugRender(ShapeRenderer renderer) {
 		renderer.rect(x, y, width, height);
+	}
+	
+	public void render(SpriteBatch batch) {
+		batch.draw(texture, x-8, y-2);
 	}
 
 	public void update(float delta, float speed) {
 		score++;
-		if(boosting) { //Bevegelse i x
-			if(x < top) {
-				horSpeed += delta*10 + .1;
+		if (boosting) { // Bevegelse i x
+			if (x < top) {
+				horSpeed += delta * 10 + .1;
+			} else {
+				horSpeed -= delta * top / 10;
 			}
-			else {
-				horSpeed -= delta*top/10;
-			}
-		 }else if(horSpeed > 0) {
-			horSpeed -= delta*top/10;
-		} else if(back) {
-			horSpeed -= delta*30 + .1;
+		} else if (horSpeed > 0) {
+			horSpeed -= delta * top / 10;
+		} else if (back) {
+			horSpeed -= delta * 30 + .1;
 		} else {
-			horSpeed = -delta*speed;
+			horSpeed = -delta * speed;
 		}
 
-		horSpeed = horSpeed*0.95f;
+		horSpeed = horSpeed * 0.95f;
 		x += horSpeed;
 
-		if(y >= 0) { //Bevegelse i y
-			if(y <= 620) {
-				if(flying) {
-					vertSpeed += delta*20;
+		if (y >= 0) { // Bevegelse i y
+			if (y <= 620) {
+				if (flying) {
+					vertSpeed += delta * 20;
 				} else {
-					vertSpeed -= delta*20;
+					vertSpeed -= delta * 20;
 				}
 			} else {
 				vertSpeed = 0;
@@ -49,10 +59,10 @@ public class Player {
 		}
 	}
 
-
 	public int getScore(float delta, float speed) {
 		return score;
 	}
+
 	public boolean isColliding(float minX, float maxX, float minY, float maxY) {
 		return !((x > maxX || x + width < minX) || (y > maxY || y + height < minY));
 	}

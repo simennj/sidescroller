@@ -21,10 +21,15 @@ public class Hindrance {
 	public void update(float delta, float speed) {
 		x -= speed * delta;
 	}
-	
+
+	public boolean contains(int x, int y) {
+		return x >= this.x && x <= this.x + width && y >= this.y
+				&& y <= this.y + height;
+	}
+
 	@Override
-	public String toString(){
-		return "hindrance "+width+" "+height+" "+x+" "+y;
+	public String toString() {
+		return "hindrance " + width + " " + height + " " + x + " " + y;
 	}
 
 	@Override

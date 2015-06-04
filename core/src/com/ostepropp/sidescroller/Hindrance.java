@@ -29,7 +29,7 @@ public class Hindrance {
 
 	@Override
 	public String toString() {
-		return "hindrance " + width + " " + height + " " + x + " " + y;
+		return "hindrance " + width + " " + height + " " + (x+1280) + " " + y;
 	}
 
 	@Override

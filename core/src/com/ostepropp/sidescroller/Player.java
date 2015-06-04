@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Player {
-	public float width = 120, height = 60, x = 300, y = 310, horSpeed,
+	public float width = 106, height = 46, x = 300, y = 310, horSpeed,
 			vertSpeed;
 	public boolean flying, boosting, back, hold;
 	public int top = 1000, bot = 0, score;
@@ -18,7 +18,7 @@ public class Player {
 	}
 	
 	public void render(SpriteBatch batch) {
-		batch.draw(texture, x-8, y-2);
+		batch.draw(texture, x-16, y-10);
 	}
 
 	public void update(float delta, float speed) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 
@@ -25,7 +26,9 @@ public class LevelLoader {
 				String[] line = scanner.nextLine().split(" ");
 				if (line.length > 1)
 					hindrances.add(new Hindrance(Float.parseFloat(line[1]),
-							Float.parseFloat(line[2]),Float.parseFloat(line[3]),Float.parseFloat(line[4])));
+							Float.parseFloat(line[2]), Float
+									.parseFloat(line[3]), Float
+									.parseFloat(line[4])));
 				else {
 					segments.add(hindrances);
 					segmentLength.add(Float.parseFloat(line[0]));
@@ -46,12 +49,20 @@ public class LevelLoader {
 		}
 		return tmp;
 	}
-	
+
 	public float getSegmentLength(int i) {
 		return segmentLength.get(i);
 	}
-	
+
 	public int totalSegments() {
 		return segments.size();
+	}
+
+	public String[] getSegmentsList() {
+		String[] result = new String[segments.size()];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = "Segment: "+(i+1);
+		}
+		return result;
 	}
 }

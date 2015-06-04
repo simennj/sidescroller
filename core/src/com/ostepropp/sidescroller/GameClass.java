@@ -27,4 +27,8 @@ public class GameClass extends Game {
 	public void startEditor() {
 		setScreen(editorScreen);
 	}
+	
+	public void showMenu() {
+		setScreen(menuScreen);
+	}
 }

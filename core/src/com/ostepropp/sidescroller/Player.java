@@ -25,7 +25,7 @@ public class Player {
 		score++;
 		if (boosting) { // Bevegelse i x
 			if (x < top) {
-				horSpeed += delta * 10 + .1;
+				horSpeed += delta * 10;
 			} else {
 				horSpeed -= delta * top / 10;
 			}

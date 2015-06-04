@@ -59,7 +59,28 @@ public class GameScreen implements Screen, InputProcessor {
 		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
 		start();
-	}
+
+        //Gameoverskjerm
+        // Egen font
+        font = new FreeTypeFontGenerator(
+                Gdx.files.internal("fonts/visitor1.ttf"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 50;
+        BitmapFont visitor5 = font.generateFont(parameter);
+
+        stage = new Stage(new ScreenViewport());
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        table = new Table(skin);
+        table.setFillParent(true);
+
+        // Label
+        style = new Label.LabelStyle(visitor5, Color.RED);
+        label = new Label("Game Over, taper", style);
+        table.add(label);
+        table.setDebug(true);
+        stage.addActor(table);
+
+    }
 
 	public void start() {
 		player = new Player();
@@ -124,24 +145,6 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	public void gameover() {
-		// Egen font
-		font = new FreeTypeFontGenerator(
-				Gdx.files.internal("fonts/visitor1.ttf"));
-		parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.size = 50;
-		BitmapFont visitor5 = font.generateFont(parameter);
-
-		stage = new Stage(new ScreenViewport());
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		table = new Table(skin);
-		table.setFillParent(true);
-
-		// Label
-		style = new Label.LabelStyle(visitor5, Color.RED);
-		label = new Label("Game Over, taper", style);
-		table.add(label);
-		table.setDebug(true);
-		stage.addActor(table);
 
 		stage.draw();
 		font.dispose();

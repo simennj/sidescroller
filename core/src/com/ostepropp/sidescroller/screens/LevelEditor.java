@@ -1,11 +1,7 @@
 package com.ostepropp.sidescroller.screens;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -19,15 +15,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.ostepropp.sidescroller.GameClass;
 import com.ostepropp.sidescroller.Hindrance;
 import com.ostepropp.sidescroller.LevelLoader;
@@ -134,23 +126,11 @@ public class LevelEditor implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 		case Keys.S:
-			try {
-				Writer writer = new FileWriter(Gdx.files
-						.internal("levels/test").file());
-				for (Hindrance hindrance : hindrances) {
-					writer.write(hindrance + "\n");
-				}
-				double asdf = hindrances.stream()
-						.mapToDouble(h -> h.x + h.width).max().orElse(1280);
-				writer.write(Double.toString(asdf));
-				writer.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			loader.saveLevel(hindrances, 0);
 			break;
 		case Keys.ESCAPE:
 			game.showMenu();
+			break;
 		default:
 			break;
 		}

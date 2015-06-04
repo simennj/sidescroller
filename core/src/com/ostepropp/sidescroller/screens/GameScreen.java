@@ -10,6 +10,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -29,6 +30,8 @@ import com.ostepropp.sidescroller.Player;
 
 public class GameScreen implements Screen, InputProcessor {
 
+	FPSLogger logger = new FPSLogger();
+	
 	ShapeRenderer debugRenderer;
 	
 	SpriteBatch batch;
@@ -117,6 +120,7 @@ public class GameScreen implements Screen, InputProcessor {
         if (gameOver) {
             gameover();
         }
+        logger.log();
 	}
 
 	public void gameover() {

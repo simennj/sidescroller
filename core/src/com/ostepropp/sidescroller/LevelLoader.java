@@ -1,10 +1,11 @@
 package com.ostepropp.sidescroller;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 
@@ -12,16 +13,17 @@ public class LevelLoader {
 
 	private List<List<Hindrance>> segments = new ArrayList<List<Hindrance>>();;
 	private List<Float> segmentLength = new ArrayList<Float>();
+	private String currentPath;
 
 	public LevelLoader(String path) {
 		loadLevel(path);
 	}
 
-	public void loadLevel(String path) {
+	public void loadLevel() {
 		Scanner scanner = null;
 		try {
 			List<Hindrance> hindrances = new ArrayList<Hindrance>();
-			scanner = new Scanner(Gdx.files.internal(path).file());
+			scanner = new Scanner(Gdx.files.internal(currentPath).file());
 			while (scanner.hasNextLine()) {
 				String[] line = scanner.nextLine().split(" ");
 				if (line.length > 1)
@@ -39,6 +41,28 @@ public class LevelLoader {
 			e.printStackTrace();
 		} finally {
 			scanner.close();
+		}
+	}
+	
+	public void loadLevel(String path) {
+		currentPath = path;
+		loadLevel();
+	}
+	
+	public void saveLevel(List<Hindrance> hindrances, int index) {
+		try {
+			Writer writer = new FileWriter(Gdx.files
+					.internal("levels/test").file());
+			for (Hindrance hindrance : hindrances) {
+				writer.write(hindrance + "\n");
+			}
+			double asdf = hindrances.stream()
+					.mapToDouble(h -> h.x + h.width).max().orElse(1280);
+			writer.write(Double.toString(asdf));
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

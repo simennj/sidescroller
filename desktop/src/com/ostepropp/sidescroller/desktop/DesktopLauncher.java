@@ -10,6 +10,8 @@ public class DesktopLauncher {
 		config.width = 1280;
 		config.height = 720;
 		config.title = "ShapeRenderer er BEST";
+		config.vSyncEnabled = false;
+		config.foregroundFPS = 0;
 		new LwjglApplication(new GameClass(), config);
 	}
 }

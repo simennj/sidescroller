@@ -25,14 +25,14 @@ public class Player {
 		score++;
 		if (boosting) { // Bevegelse i x
 			if (x < top) {
-				horSpeed += delta * 10 + .1;
+				horSpeed += delta * 10;
 			} else {
 				horSpeed -= delta * top / 10;
 			}
 		} else if (horSpeed > 0) {
 			horSpeed -= delta * top / 10;
 		} else if (back) {
-			horSpeed -= delta * 30 + .1;
+			horSpeed -= delta * 30;
 		} else {
 			horSpeed = -delta * speed;
 		}
@@ -51,8 +51,9 @@ public class Player {
 				vertSpeed = 0;
 				y = 620;
 			}
-			vertSpeed = vertSpeed * 0.95f;
-			y += vertSpeed;
+			vertSpeed = vertSpeed *(1f-delta*3f);
+			System.out.println(delta*3f);
+			y += vertSpeed*delta*60;
 		} else {
 			vertSpeed = 0;
 			y = 0;

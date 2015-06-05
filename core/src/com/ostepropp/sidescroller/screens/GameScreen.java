@@ -59,8 +59,9 @@ public class GameScreen implements Screen, InputProcessor {
 		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
 		start();
-
-        //Gameoverskjerm
+        gameOverfont();
+    }
+    public void gameOverfont(){
         // Egen font
         font = new FreeTypeFontGenerator(
                 Gdx.files.internal("fonts/visitor1.ttf"));
@@ -79,7 +80,6 @@ public class GameScreen implements Screen, InputProcessor {
         table.add(label);
         table.setDebug(true);
         stage.addActor(table);
-
     }
 
 	public void start() {

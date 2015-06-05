@@ -148,7 +148,6 @@ public class GameScreen implements Screen, InputProcessor {
         batch.end();
 
         if (gameOver) {
-
             gameover();
         }
         logger.log();

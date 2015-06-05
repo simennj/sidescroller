@@ -53,7 +53,7 @@ public class Player {
 			}
 			vertSpeed = vertSpeed *(1f-delta*3f);
 			System.out.println(delta*3f);
-			y += vertSpeed*delta*100;
+			y += vertSpeed*delta*60;
 		} else {
 			vertSpeed = 0;
 			y = 0;

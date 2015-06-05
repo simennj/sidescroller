@@ -9,6 +9,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,12 +46,13 @@ public class GameScreen implements Screen, InputProcessor {
 	int currentSegment, totalSegments = loader.totalSegments();
 	boolean gameOver;
 
+    Music music;
+    Sound crash;
 	Stage stage;
 	Label label;
 	Skin skin;
 	Table table;
 	Label.LabelStyle style;
-
 	FreeTypeFontGenerator font;
 	FreeTypeFontGenerator.FreeTypeFontParameter parameter;
 
@@ -59,8 +62,13 @@ public class GameScreen implements Screen, InputProcessor {
 		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
 		start();
-
-        //Gameoverskjerm
+        audio();
+        gameOverfont();
+    }
+    public void audio(){
+        crash = Gdx.audio.newSound(Gdx.files.internal("audio/Explosion.wav"));
+    }
+    public void gameOverfont(){
         // Egen font
         font = new FreeTypeFontGenerator(
                 Gdx.files.internal("fonts/visitor1.ttf"));
@@ -79,7 +87,6 @@ public class GameScreen implements Screen, InputProcessor {
         table.add(label);
         table.setDebug(true);
         stage.addActor(table);
-
     }
 
 	public void start() {
@@ -98,7 +105,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 0);
+		Gdx.gl.glClearColor(102/255f, 75/255f, 192/255f, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if (!gameOver) {
@@ -109,10 +116,12 @@ public class GameScreen implements Screen, InputProcessor {
 						+ hindrance.width, hindrance.y, hindrance.y
 						+ hindrance.height)) {
 					System.out.println(player.getScore(delta, speed));
+                    crash.play();
 					gameOver = true;
 				}
 			}
 			if (player.isColliding(0, 0, 0, 720)) {
+                crash.play();
 				gameOver = true;
 			}
 			lengthToNextSegment -= speed * delta;
@@ -172,6 +181,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public void dispose() {
         font.dispose();
         stage.dispose();
+        crash.dispose();
 	}
 
 	@Override

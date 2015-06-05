@@ -91,7 +91,7 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	public void loadSegment(int i) {
-		hindrances.addAll(loader.getSegment(i));
+		hindrances.addAll(loader.getSegment(i,true));
 		lengthToNextSegment = loader.getSegmentLength(i);
 		System.out.println(hindrances);
 	}

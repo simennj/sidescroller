@@ -38,7 +38,6 @@ public class LevelEditor implements Screen, InputProcessor {
 	Skin skin;
 	LevelLoader loader = new LevelLoader("levels/test");
 	List<Hindrance> hindrances;
-	float SegmentLength;
 	int currentSegment, totalSegments = loader.totalSegments();
 	int createX, createY, createWidth, createHeight, offset;
 
@@ -70,9 +69,8 @@ public class LevelEditor implements Screen, InputProcessor {
 	}
 
 	public void loadSegment(int i) {
-		hindrances = loader.getSegment(i).stream().peek(h -> h.x -= 1280)
+		hindrances = loader.getSegment(i,false).stream().peek(h -> h.x -= 0)
 				.collect(Collectors.toList());
-		SegmentLength = loader.getSegmentLength(i);
 		currentSegment=i;
 	}
 
@@ -183,7 +181,7 @@ public class LevelEditor implements Screen, InputProcessor {
 			hindrances.add(new Hindrance(Math.abs(createWidth), Math
 					.abs(createHeight), createWidth < 0 ? createX + createWidth
 					: createX, createHeight < 0 ? createY + createHeight
-					: createY));
+					: createY,false));
 		}
 		return false;
 	}

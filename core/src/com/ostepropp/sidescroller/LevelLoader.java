@@ -30,7 +30,7 @@ public class LevelLoader {
 					hindrances.add(new Hindrance(Float.parseFloat(line[1]),
 							Float.parseFloat(line[2]), Float
 									.parseFloat(line[3]), Float
-									.parseFloat(line[4])));
+									.parseFloat(line[4]),false));
 				else {
 					segments.add(hindrances);
 					segmentLength.add(Float.parseFloat(line[0]));
@@ -50,44 +50,44 @@ public class LevelLoader {
 	}
 
 	public void saveLevel(List<Hindrance> hindrances, int index) {
-		Scanner scanner = null;
 		try {
-			String level= "";
-			scanner = new Scanner(Gdx.files.internal(currentPath).file());
-			while (scanner.hasNextLine()) {
-				level += scanner.nextLine()+"\n";
-			}
-			System.out.println(level);
-			String [] segments = level.split("(?<=(\\n\\d{0,10}\\.\\d{0,10}\\n))");
-			System.out.println(segments[0]+"\n\n"+segments[1]);
-			scanner.close();
-			
+			segments.set(index, hindrances);
+			segmentLength.set(index,
+					(float) hindrances.stream().mapToDouble(h -> h.x + h.width)
+							.max().orElse(1280));
 			Writer writer = new FileWriter(Gdx.files.internal("levels/test")
 					.file());
-			String segment = "";
-			for (Hindrance hindrance : hindrances) {
-				segment+=hindrance+"\n";
+			for (int i = 0; i < segments.size(); i++) {
+				List<Hindrance> segment = segments.get(i);
+				writer.write(segment.stream().map(h -> h.toString() + "\n")
+						.reduce((s, h) -> s + h).orElse(""));
+				writer.write(segmentLength.get(i) + "\n");
 			}
-					
-			double asdf = hindrances.stream().mapToDouble(h -> h.x + h.width)
-					.max().orElse(1280);
-			segments[index] = segment + asdf + "\n";	
-			for (int i = 0; i < segments.length; i++) {
-				writer.write(segments[i]);
-			}
+
 			writer.close();
-		} catch (IOException e) {
+
+			} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public List<Hindrance> getSegment(int i) {
+	public List<Hindrance> getSegment(int i, boolean offset) {
+		if (i >= segments.size()) {
+			segments.add(new ArrayList<Hindrance>());
+			return new ArrayList<Hindrance>();
+		}
 		List<Hindrance> tmp = new ArrayList<Hindrance>(segments.get(i).size());
 		for (Hindrance hindrance : segments.get(i)) {
-			tmp.add((Hindrance) hindrance.clone());
+			tmp.add(offset?hindrance.offsetClone():(Hindrance)hindrance.clone());
 		}
 		return tmp;
+	}
+
+	public List<Hindrance> addSegment(List<Hindrance> hindrances) {
+		segments.add(hindrances);
+		segmentLength.add(0f);
+		return getSegment(segments.size(),false);
 	}
 
 	public float getSegmentLength(int i) {
@@ -99,10 +99,11 @@ public class LevelLoader {
 	}
 
 	public String[] getSegmentsList() {
-		String[] result = new String[segments.size()];
+		String[] result = new String[segments.size() + 1];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = "Segment: " + (i + 1);
 		}
+		result[segments.size()] = "Add Segment";
 		return result;
 	}
 }

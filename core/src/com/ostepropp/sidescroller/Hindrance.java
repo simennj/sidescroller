@@ -6,11 +6,11 @@ public class Hindrance {
 
 	public float width, height, x, y;
 
-	public Hindrance(float width, float height, float x, float y) {
+	public Hindrance(float width, float height, float x, float y,boolean offset) {
 		super();
 		this.width = width;
 		this.height = height;
-		this.x = x;
+		this.x = offset?x+1280:x;
 		this.y = y;
 	}
 
@@ -29,11 +29,15 @@ public class Hindrance {
 
 	@Override
 	public String toString() {
-		return "hindrance " + width + " " + height + " " + (x+1280) + " " + y;
+		return "hindrance " + width + " " + height + " " + x + " " + y;
 	}
 
+	public Hindrance offsetClone() {
+		return new Hindrance(this.width, this.height, this.x, this.y,true);
+	}
+	
 	@Override
 	public Object clone() {
-		return new Hindrance(this.width, this.height, this.x, this.y);
+		return new Hindrance(this.width, this.height, this.x, this.y,false);
 	}
 }

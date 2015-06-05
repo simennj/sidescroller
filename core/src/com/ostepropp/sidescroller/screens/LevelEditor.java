@@ -126,7 +126,7 @@ public class LevelEditor implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 		case Keys.S:
-			loader.saveLevel(hindrances, 0);
+			loader.saveLevel(hindrances, currentSegment);
 			break;
 		case Keys.ESCAPE:
 			game.showMenu();
@@ -196,7 +196,7 @@ public class LevelEditor implements Screen, InputProcessor {
 			if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 				createWidth = MathUtils.round((float) (screenX - createX) / 10) * 10;
 				createHeight = MathUtils
-						.round((float) (720 - screenY - createY) / 10) * 10;
+						.round((float) (screenY - createY) / 10) * 10;
 			} else {
 				createWidth = screenX - createX;
 				createHeight = screenY - createY;

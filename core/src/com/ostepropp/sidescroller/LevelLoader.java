@@ -43,22 +43,38 @@ public class LevelLoader {
 			scanner.close();
 		}
 	}
-	
+
 	public void loadLevel(String path) {
 		currentPath = path;
 		loadLevel();
 	}
-	
+
 	public void saveLevel(List<Hindrance> hindrances, int index) {
+		Scanner scanner = null;
 		try {
-			Writer writer = new FileWriter(Gdx.files
-					.internal("levels/test").file());
-			for (Hindrance hindrance : hindrances) {
-				writer.write(hindrance + "\n");
+			String level= "";
+			scanner = new Scanner(Gdx.files.internal(currentPath).file());
+			while (scanner.hasNextLine()) {
+				level += scanner.nextLine()+"\n";
 			}
-			double asdf = hindrances.stream()
-					.mapToDouble(h -> h.x + h.width).max().orElse(1280);
-			writer.write(Double.toString(asdf));
+			System.out.println(level);
+			String [] segments = level.split("(?<=(\\n\\d{0,10}\\.\\d{0,10}\\n))");
+			System.out.println(segments[0]+"\n\n"+segments[1]);
+			scanner.close();
+			
+			Writer writer = new FileWriter(Gdx.files.internal("levels/test")
+					.file());
+			String segment = "";
+			for (Hindrance hindrance : hindrances) {
+				segment+=hindrance+"\n";
+			}
+					
+			double asdf = hindrances.stream().mapToDouble(h -> h.x + h.width)
+					.max().orElse(1280);
+			segments[index] = segment + asdf + "\n";	
+			for (int i = 0; i < segments.length; i++) {
+				writer.write(segments[i]);
+			}
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -85,7 +101,7 @@ public class LevelLoader {
 	public String[] getSegmentsList() {
 		String[] result = new String[segments.size()];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = "Segment: "+(i+1);
+			result[i] = "Segment: " + (i + 1);
 		}
 		return result;
 	}

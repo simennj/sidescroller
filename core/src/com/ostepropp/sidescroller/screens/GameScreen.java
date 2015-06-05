@@ -147,7 +147,6 @@ public class GameScreen implements Screen, InputProcessor {
 	public void gameover() {
 
 		stage.draw();
-		font.dispose();
 	}
 
 	@Override

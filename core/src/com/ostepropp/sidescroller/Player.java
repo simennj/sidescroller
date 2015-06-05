@@ -32,7 +32,7 @@ public class Player {
 		} else if (horSpeed > 0) {
 			horSpeed -= delta * top / 10;
 		} else if (back) {
-			horSpeed -= delta * 30 + .1;
+			horSpeed -= delta * 30;
 		} else {
 			horSpeed = -delta * speed;
 		}
@@ -51,8 +51,9 @@ public class Player {
 				vertSpeed = 0;
 				y = 620;
 			}
-			vertSpeed = vertSpeed * 0.95f;
-			y += vertSpeed;
+			vertSpeed = vertSpeed *(1f-delta*3f);
+			System.out.println(delta*3f);
+			y += vertSpeed*delta*100;
 		} else {
 			vertSpeed = 0;
 			y = 0;

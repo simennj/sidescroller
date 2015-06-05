@@ -47,7 +47,7 @@ public class MenuScreen implements Screen {
 				game.startEditor();
 			}
 		});
-		table.add(new Label("ShapeRenderer er BEST", skin)).colspan(2);
+		table.add(new Label("Super Heli 2", skin)).colspan(2);
 		table.row();
 		table.add(start);
 		table.add(editor);

@@ -40,6 +40,7 @@ public class LevelEditor implements Screen, InputProcessor {
 	List<Hindrance> hindrances;
 	int currentSegment, totalSegments = loader.totalSegments();
 	int createX, createY, createWidth, createHeight, offset;
+	SelectBox<String> segments;
 
 	@Override
 	public void show() {
@@ -48,14 +49,14 @@ public class LevelEditor implements Screen, InputProcessor {
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		Table table = new Table();
 		table.setFillParent(true);
-		SelectBox<String> segments = new SelectBox<String>(skin);
+		segments = new SelectBox<String>(skin);
 		segments.setItems(loader.getSegmentsList());
 		segments.addListener(new ChangeListener() {
-			
+
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				int i = ((SelectBox<String>)actor).getSelectedIndex();
-				if(i!=currentSegment)
+				int i = ((SelectBox<String>) actor).getSelectedIndex();
+				if (i != currentSegment)
 					loadSegment(i);
 				System.out.println(hindrances);
 			}
@@ -63,15 +64,15 @@ public class LevelEditor implements Screen, InputProcessor {
 		table.add(segments);
 		table.debug();
 		stage.addActor(table);
-		input = new InputMultiplexer(stage,this);
+		input = new InputMultiplexer(stage, this);
 		Gdx.input.setInputProcessor(input);
 		loadSegment(currentSegment);
 	}
 
 	public void loadSegment(int i) {
-		hindrances = loader.getSegment(i,false).stream().peek(h -> h.x -= 0)
+		hindrances = loader.getSegment(i, false).stream().peek(h -> h.x -= 0)
 				.collect(Collectors.toList());
-		currentSegment=i;
+		currentSegment = i;
 	}
 
 	@Override
@@ -132,6 +133,7 @@ public class LevelEditor implements Screen, InputProcessor {
 		default:
 			break;
 		}
+		segments.setItems(loader.getSegmentsList());
 		return false;
 	}
 
@@ -181,7 +183,7 @@ public class LevelEditor implements Screen, InputProcessor {
 			hindrances.add(new Hindrance(Math.abs(createWidth), Math
 					.abs(createHeight), createWidth < 0 ? createX + createWidth
 					: createX, createHeight < 0 ? createY + createHeight
-					: createY,false));
+					: createY, false));
 		}
 		return false;
 	}

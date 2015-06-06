@@ -74,7 +74,7 @@ public class LevelLoader {
 
 	public List<Hindrance> getSegment(int i, boolean offset) {
 		if (i >= segments.size()) {
-			segments.add(new ArrayList<Hindrance>());
+			addSegment(new ArrayList<Hindrance>());
 			return new ArrayList<Hindrance>();
 		}
 		List<Hindrance> tmp = new ArrayList<Hindrance>(segments.get(i).size());
@@ -84,10 +84,9 @@ public class LevelLoader {
 		return tmp;
 	}
 
-	public List<Hindrance> addSegment(List<Hindrance> hindrances) {
+	public void addSegment(List<Hindrance> hindrances) {
 		segments.add(hindrances);
 		segmentLength.add(0f);
-		return getSegment(segments.size(),false);
 	}
 
 	public float getSegmentLength(int i) {
